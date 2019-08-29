@@ -30,19 +30,23 @@ var highBidder = initialBidder;
 database.ref().on("value", function(snapshot) {
 
   // If Firebase has a highPrice and highBidder stored (first case)
-  if (snapshot.child("highBidder").exists() && snapshot.child("highPrice").exists()) {
+  if (snapshot.child("name").exists() && snapshot.child("price").exists()) {
 
     // Set the variables for highBidder/highPrice equal to the stored values in firebase.
     // highPrice = ...
     // highBidder = ...
-    
+    highPrice = snapshot.val().price;
+    highBidder = snapshot.val().name;
 
 
     // Change the HTML to reflect the stored values
+    $("#highest-bidder").html(highBidder);
+    $("#highest-price").html(highPrice);
 
 
     // Print the data to the console.
-
+    console.log("Current high price: " + highPrice);
+    console.log("Current high bidder: " + highBidder);
 
   }
 
@@ -50,10 +54,12 @@ database.ref().on("value", function(snapshot) {
   else {
 
     // Change the HTML to reflect the initial values
-
+    $("#highest-bidder").html(highBidder);
+    $("#highest-price").html(highPrice);
 
     // Print the data to the console.
-
+    console.log("Current high price: " + highPrice);
+    console.log("Current high bidder: " + highBidder);
 
   }
 
@@ -71,22 +77,26 @@ $("#submit-bid").on("click", function(event) {
   event.preventDefault();
 
   // Get the input values
-
+  var name = $("#bidder-name").val().trim();
+  var price = $("#bidder-price").val().trim();
 
   // Log the Bidder and Price (Even if not the highest)
-  if (bidderPrice > highPrice) {
+  if (price > highPrice) {
 
     // Alert
     alert("You are now the highest bidder.");
 
     // Save the new price in Firebase
-
+    database.ref().set({
+      name: name,
+      price: price,
+    });
 
     // Log the new High Price
 
 
     // Store the new high price and bidder name as a local variable
-
+    
 
     // Change the HTML to reflect the new high price and bidder
 
